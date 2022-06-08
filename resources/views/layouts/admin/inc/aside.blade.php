@@ -31,7 +31,7 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item {{ request()->is('admin/master-data/*') ? 'menu-open' : '' }}">
+                {{-- <li class="nav-item {{ request()->is('admin/master-data/*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->is('admin/master-data/*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-server"></i>
                         <p>
@@ -85,15 +85,6 @@
                         <i class="nav-icon fas fa-file-upload"></i>
                         <p>
                             Barang Keluar
-                        </p>
-                    </a>
-                </li>
-                {{-- <li class="nav-item">
-                    <a href="{{ route('admin.inventory.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.inventory.index') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-boxes"></i>
-                        <p>
-                            Inventory
                         </p>
                     </a>
                 </li> --}}

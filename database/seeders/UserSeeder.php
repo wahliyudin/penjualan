@@ -21,6 +21,6 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => '123456789', // password
             'remember_token' => Str::random(10),
-        ]);
+        ])->attachRole('admin');
     }
 }
