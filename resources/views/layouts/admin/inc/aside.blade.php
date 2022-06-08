@@ -3,7 +3,7 @@
     <a href="index3.html" class="brand-link">
         {{-- <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8"> --}}
-        <span class="brand-text font-weight-light">Persediaan</span>
+        <span class="brand-text font-weight-light">{{ env('APP_NAME') }}</span>
     </a>
 
     <!-- Sidebar -->
@@ -31,7 +31,7 @@
                         </p>
                     </a>
                 </li>
-                {{-- <li class="nav-item {{ request()->is('admin/master-data/*') ? 'menu-open' : '' }}">
+                <li class="nav-item {{ request()->is('admin/master-data/*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->is('admin/master-data/*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-server"></i>
                         <p>
@@ -41,53 +41,66 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('admin.satuan.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.satuan.index') ? 'active' : '' }}">
+                            <a href="{{ route('admin.type-products.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.type-products.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Satuan</p>
+                                <p>Jenis Barang</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.jenis.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.jenis.index') ? 'active' : '' }}">
+                            <a href="" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Jenis</p>
+                                <p>Klasifikasi</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('admin.gudang.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.gudang.index') ? 'active' : '' }}">
+                            <a href="" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Data Gudang</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.products.index') }}"
-                                class="nav-link {{ request()->routeIs('admin.products.index') ? 'active' : '' }}">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Barang</p>
+                                <p>Rekening</p>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.incoming-product.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.incoming-product.index') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-file-download"></i>
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-exchange-alt"></i>
                         <p>
-                            Barang Masuk
+                            Transaksi
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.product-out.index') }}"
-                        class="nav-link {{ request()->routeIs('admin.product-out.index') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-file-upload"></i>
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
                         <p>
-                            Barang Keluar
+                            Pelanggan
                         </p>
                     </a>
-                </li> --}}
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-box-open"></i>
+                        <p>
+                            Barang
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-boxes"></i>
+                        <p>
+                            Persediaan
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="" class="nav-link">
+                        <i class="nav-icon fas fa-file-contract"></i>
+                        <p>
+                            Laporan
+                        </p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

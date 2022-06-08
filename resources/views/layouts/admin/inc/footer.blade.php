@@ -4,6 +4,7 @@
         Anything you want
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2022-2023 <a href="http://persediaan-mutia.loc/">Persediaan Mutia</a>.</strong> All rights
+    <strong>Copyright &copy; {{ now()->year }}-{{ now()->addYear()->year }} <a
+            href="{{ url('/') }}">{{ env('APP_NAME') }}</a>.</strong> All rights
     reserved.
 </footer>
