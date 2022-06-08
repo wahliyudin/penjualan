@@ -6,15 +6,15 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Data Tipe Barang</h3>
-                        <button class="btn btn-sm btn-primary float-right" id="addNewTypeProduct"><i
+                        <h3 class="card-title">Data Klasipikasi</h3>
+                        <button class="btn btn-sm btn-primary float-right" id="addNewClassification"><i
                                 class="fas fa-plus mr-2"></i>
                             Tambah
                             Data</button>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="type_product" class="table table-bordered table-striped">
+                        <table id="classification" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    @include('admin.master-data.type-product.modal')
+    @include('admin.master-data.classification.modal')
 @endsection
 @include('layouts.inc.datatables')
 @include('layouts.inc.toastr')
@@ -39,7 +39,7 @@
     <script type="text/javascript">
         var table;
         setTimeout(function() {
-            tabletype_product();
+            tableclassification();
         }, 500);
         var ajaxError = function(jqXHR, xhr, textStatus, errorThrow, exception) {
             if (jqXHR.status === 0) {
@@ -68,14 +68,14 @@
         });
 
         // function to retrieve DataTable server side
-        function tabletype_product() {
-            $('#type_product').dataTable().fnDestroy();
-            table = $('#type_product').DataTable({
+        function tableclassification() {
+            $('#classification').dataTable().fnDestroy();
+            table = $('#classification').DataTable({
                 responsive: true,
                 serverSide: true,
                 processing: true,
                 ajax: {
-                    url: "{{ route('api.type-products.index') }}",
+                    url: "{{ route('api.classifications.index') }}",
                     type: "POST",
                     data: {
                         "_token": "{{ csrf_token() }}"
@@ -104,11 +104,11 @@
             });
         }
 
-        $('#addNewTypeProduct').click(function() {
-            $('#addEditTypeProductForm').trigger("reset");
+        $('#addNewClassification').click(function() {
+            $('#addEditClassificationForm').trigger("reset");
             $("#id").val('');
-            $('.modal-title').html("Tambah Tipe Barang");
-            $('#TypeProduct-modal').modal('show');
+            $('.modal-title').html("Tambah Klasipikasi");
+            $('#Classification-modal').modal('show');
         });
 
         $('body').on('click', '.edit', function() {
@@ -117,11 +117,11 @@
             // ajax
             $.ajax({
                 type: "GET",
-                url: "{{ url('/') }}/api/type-products/" + id + "/edit",
+                url: "{{ url('/') }}/api/classifications/" + id + "/edit",
                 dataType: 'json',
                 success: function(res) {
-                    $('.modal-title').html("Edit Tipe Barang");
-                    $('#TypeProduct-modal').modal('show');
+                    $('.modal-title').html("Edit Klasipikasi");
+                    $('#Classification-modal').modal('show');
                     $('#id').val(res.data.id);
                     $('#nama').val(res.data.nama);
                 },
@@ -138,7 +138,7 @@
             // ajax
             $.ajax({
                 type: "POST",
-                url: "{{ route('api.type-products.update-or-create') }}",
+                url: "{{ route('api.classifications.update-or-create') }}",
                 data: {
                     id: id,
                     nama: nama
@@ -149,7 +149,7 @@
                     $("#btn-save").html('Submit');
                     $("#btn-save").attr("disabled", false);
                     toastr.success(res.message, 'Berhasil!');
-                    $('#TypeProduct-modal').modal('hide');
+                    $('#Classification-modal').modal('hide');
                 },
                 error: ajaxError,
             });
@@ -158,13 +158,13 @@
         // // delete
         $('body').on('click', '.delete', function(e) {
             e.preventDefault();
-            deletetype_product($(this).attr('id'))
+            deleteclassification($(this).attr('id'))
         });
 
-        function deletetype_product(id) {
+        function deleteclassification(id) {
             Swal.fire({
                 title: 'Apakah Anda Yakin?',
-                text: "Data Tipe Barang akan dihapus secara permanen!",
+                text: "Data Klasipikasi akan dihapus secara permanen!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -173,7 +173,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: "{{ url('/') }}/api/type-products/" + id + "/destroy",
+                        url: "{{ url('/') }}/api/classifications/" + id + "/destroy",
                         type: 'DELETE',
                         success: function(resp) {
                             toastr.success(resp.message, 'Berhasil!');

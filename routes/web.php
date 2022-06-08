@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ClassificationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TypeProductController;
 use App\Http\Controllers\HomeController;
@@ -24,6 +25,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::prefix('master-data')->group(function () {
         Route::prefix('tipe-barang')->name('type-products.')->group(function () {
             Route::get('/', [TypeProductController::class, 'index'])->name('index');
+        });
+        Route::prefix('klasipikasi')->name('classifications.')->group(function () {
+            Route::get('/', [ClassificationController::class, 'index'])->name('index');
         });
     });
 });

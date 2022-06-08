@@ -48,7 +48,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ route('admin.classifications.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.classifications.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Klasifikasi</p>
                             </a>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\ClassificationController;
 use App\Http\Controllers\API\TypeProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,5 +25,11 @@ Route::name('api.')->group(function () {
         Route::post('update-or-create', [TypeProductController::class, 'updateOrCreate'])->name('update-or-create');
         Route::get('{id}/edit', [TypeProductController::class, 'edit'])->name('edit');
         Route::delete('{id}/destroy', [TypeProductController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('classifications')->name('classifications.')->group(function () {
+        Route::post('/', [ClassificationController::class, 'index'])->name('index');
+        Route::post('update-or-create', [ClassificationController::class, 'updateOrCreate'])->name('update-or-create');
+        Route::get('{id}/edit', [ClassificationController::class, 'edit'])->name('edit');
+        Route::delete('{id}/destroy', [ClassificationController::class, 'destroy'])->name('destroy');
     });
 });
