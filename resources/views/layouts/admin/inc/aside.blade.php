@@ -55,7 +55,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ route('admin.accounts.index') }}"
+                                class="nav-link {{ request()->routeIs('admin.accounts.index') ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Rekening</p>
                             </a>

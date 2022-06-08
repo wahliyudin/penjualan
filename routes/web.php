@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\ClassificationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TypeProductController;
@@ -28,6 +29,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         });
         Route::prefix('klasipikasi')->name('classifications.')->group(function () {
             Route::get('/', [ClassificationController::class, 'index'])->name('index');
+        });
+        Route::prefix('rekening')->name('accounts.')->group(function () {
+            Route::get('/', [AccountController::class, 'index'])->name('index');
         });
     });
 });
