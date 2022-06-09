@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AccountController;
 use App\Http\Controllers\API\ClassificationController;
+use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\SupplyController;
 use App\Http\Controllers\API\TypeProductController;
@@ -54,5 +55,11 @@ Route::name('api.')->group(function () {
         Route::post('update-or-create', [SupplyController::class, 'updateOrCreate'])->name('update-or-create');
         Route::get('{id}/edit', [SupplyController::class, 'edit'])->name('edit');
         Route::delete('{id}/destroy', [SupplyController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('customers')->name('customers.')->group(function () {
+        Route::post('/', [CustomerController::class, 'index'])->name('index');
+        Route::post('update-or-create', [CustomerController::class, 'updateOrCreate'])->name('update-or-create');
+        Route::get('{id}/edit', [CustomerController::class, 'edit'])->name('edit');
+        Route::delete('{id}/destroy', [CustomerController::class, 'destroy'])->name('destroy');
     });
 });

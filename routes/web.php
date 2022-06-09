@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\ClassificationController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SupplyController;
@@ -43,6 +44,10 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::prefix('persediaan')->name('supplies.')->group(function () {
         Route::get('/', [SupplyController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('pelanggan')->name('customers.')->group(function () {
+        Route::get('/', [CustomerController::class, 'index'])->name('index');
     });
 });
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth'])->name('dashboard');

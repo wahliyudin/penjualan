@@ -72,7 +72,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('admin.customers.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.customers.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             Pelanggan
