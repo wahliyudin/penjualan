@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ClassificationController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\SupplyController;
 use App\Http\Controllers\Admin\TypeProductController;
 use App\Http\Controllers\HomeController;
@@ -48,6 +49,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
 
     Route::prefix('pelanggan')->name('customers.')->group(function () {
         Route::get('/', [CustomerController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('penjualan')->name('sales.')->group(function () {
+        Route::get('/', [SaleController::class, 'index'])->name('index');
+        Route::get('create', [SaleController::class, 'create'])->name('create');
     });
 });
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth'])->name('dashboard');

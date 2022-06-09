@@ -16,4 +16,9 @@ class Sale extends Model
         'keterangan',
         'jumlah'
     ];
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

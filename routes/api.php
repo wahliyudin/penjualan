@@ -4,6 +4,7 @@ use App\Http\Controllers\API\AccountController;
 use App\Http\Controllers\API\ClassificationController;
 use App\Http\Controllers\API\CustomerController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\API\SaleController;
 use App\Http\Controllers\API\SupplyController;
 use App\Http\Controllers\API\TypeProductController;
 use Illuminate\Http\Request;
@@ -61,5 +62,10 @@ Route::name('api.')->group(function () {
         Route::post('update-or-create', [CustomerController::class, 'updateOrCreate'])->name('update-or-create');
         Route::get('{id}/edit', [CustomerController::class, 'edit'])->name('edit');
         Route::delete('{id}/destroy', [CustomerController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('sales')->name('sales.')->group(function () {
+        Route::post('/', [SaleController::class, 'index'])->name('index');
+        Route::post('store', [SaleController::class, 'store'])->name('store');
+        Route::delete('{id}/destroy', [SaleController::class, 'destroy'])->name('destroy');
     });
 });
