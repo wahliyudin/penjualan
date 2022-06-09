@@ -80,7 +80,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('admin.products.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.products.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-box-open"></i>
                         <p>
                             Barang

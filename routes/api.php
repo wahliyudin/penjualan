@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AccountController;
 use App\Http\Controllers\API\ClassificationController;
+use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\TypeProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,5 +39,11 @@ Route::name('api.')->group(function () {
         Route::post('update-or-create', [AccountController::class, 'updateOrCreate'])->name('update-or-create');
         Route::get('{id}/edit', [AccountController::class, 'edit'])->name('edit');
         Route::delete('{id}/destroy', [AccountController::class, 'destroy'])->name('destroy');
+    });
+    Route::prefix('products')->name('products.')->group(function () {
+        Route::post('/', [ProductController::class, 'index'])->name('index');
+        Route::post('update-or-create', [ProductController::class, 'updateOrCreate'])->name('update-or-create');
+        Route::get('{id}/edit', [ProductController::class, 'edit'])->name('edit');
+        Route::delete('{id}/destroy', [ProductController::class, 'destroy'])->name('destroy');
     });
 });
