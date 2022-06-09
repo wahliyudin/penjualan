@@ -4,17 +4,18 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Supply;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\Facades\DataTables;
 
-class ProductController extends Controller
+class SupplyController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Product::with('typeProduct')->latest()->get();
+            $data = Supply::with('product')->latest()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -23,8 +24,11 @@ class ProductController extends Controller
         class="delete btn btn-danger btn-sm" id="' . Crypt::encrypt($row->id) . '">Hapus</a>';
                     return $actionBtn;
                 })
-                ->addColumn('harga', function($row){
-                    return numberFormat($row->harga,'Rp.');
+                ->addColumn('total', function ($row) {
+                    return numberFormat($row->total, 'Rp.');
+                })
+                ->addColumn('product.harga', function ($row) {
+                    return numberFormat($row->product->harga, 'Rp.');
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -34,19 +38,26 @@ class ProductController extends Controller
     public function updateOrCreate(Request $request)
     {
         try {
-            Product::updateOrCreate(
-                [
-                    'id' => $request->id
-                ],
-                [
-                    'nama' => $request->nama,
-                    'type_product_id' => $request->type_product_id,
-                    'harga' => replaceRupiah($request->harga),
-                ]
-            );
+            if (!$request->id && $supply = Supply::where('product_id',$request->product_id)->first()) {
+                $supply->update([
+                    'stok' => $supply->stok + $request->stok,
+                    'total' => $supply->total + replaceRupiah($request->total)
+                ]);
+            } else {
+                Supply::updateOrCreate(
+                    [
+                        'id' => $request->id
+                    ],
+                    [
+                        'product_id' => $request->product_id,
+                        'stok' => $request->stok,
+                        'total' => replaceRupiah($request->total),
+                    ]
+                );
+            }
             return response()->json([
                 'status' => 'success',
-                'message' => isset($request->id) ? 'Ubah Data Barang' : 'Menambahkan data Barang',
+                'message' => isset($request->id) ? 'Ubah Data Persediaan' : 'Menambahkan data Persediaan',
             ]);
         } catch (\Exception $th) {
             $th->getCode() == 400 ? $code = 400 : $code = 500;
@@ -61,40 +72,16 @@ class ProductController extends Controller
     {
         try {
             $id = Crypt::decrypt($id);
-            $product = Product::find($id);
-            if (!$product) {
-                throw new Exception('Data Barang tidak ditemukan!', 400);
+            $supply = Supply::with('product')->find($id);
+            if (!$supply) {
+                throw new Exception('Data Persediaan tidak ditemukan!', 400);
             }
             $data = [
-                'id' => $product->id,
-                'nama' => $product->nama,
-                'type_product_id' => $product->type_product_id,
-                'harga' => $product->harga,
-            ];
-            return response()->json([
-                'status' => 'success',
-                'data' => $data,
-            ]);
-        } catch (\Exception $th) {
-            $th->getCode() == 400 ? $code = 400 : $code = 500;
-            return response()->json([
-                'status' => 'error',
-                'message' => $th->getMessage()
-            ], $code);
-        }
-    }
-
-    public function byId($id)
-    {
-        try {
-            $product = Product::find($id);
-            if (!$product) {
-                throw new Exception('Data Barang tidak ditemukan!', 400);
-            }
-            $data = [
-                'id' => $product->id,
-                'nama' => $product->nama,
-                'harga' => $product->harga,
+                'id' => $supply->id,
+                'product_id' => $supply->product_id,
+                'harga' => $supply->harga,
+                'stok' => $supply->stok,
+                'total' => $supply->total,
             ];
             return response()->json([
                 'status' => 'success',
@@ -113,15 +100,15 @@ class ProductController extends Controller
     {
         try {
             $id = Crypt::decrypt($id);
-            $product = Product::find($id);
+            $supply = Supply::find($id);
 
-            if (!$product) {
-                throw new Exception('Data Barang tidak ditemukan!', 400);
+            if (!$supply) {
+                throw new Exception('Data Persediaan tidak ditemukan!', 400);
             }
-            $product->delete();
+            $supply->delete();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Menghapus data Barang',
+                'message' => 'Menghapus data Persediaan',
             ]);
         } catch (\Exception $th) {
             $th->getCode() == 400 ? $code = 400 : $code = 500;

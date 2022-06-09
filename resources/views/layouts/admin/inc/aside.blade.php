@@ -89,7 +89,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="" class="nav-link">
+                    <a href="{{ route('admin.supplies.index') }}"
+                        class="nav-link {{ request()->routeIs('admin.supplies.index') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-boxes"></i>
                         <p>
                             Persediaan
