@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\Sale;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class SaleController extends Controller
 {
@@ -29,10 +32,30 @@ class SaleController extends Controller
                 'path' => [
                     'Penjualan' => 0
                 ]
-                ],
-                'customers' => Customer::latest()->get(['id', 'nama']),
-                'products' => Product::latest()->get(['id', 'nama']),
-                'no_faktur' => generateNoFaktur()
+            ],
+            'customers' => Customer::latest()->get(['id', 'nama']),
+            'products' => Product::latest()->get(['id', 'nama']),
+            'no_faktur' => generateNoFaktur()
+        ]);
+    }
+
+    public function edit($id)
+    {
+        try {
+            $id = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+
+        }
+        return view('admin.sale.edit', [
+            'breadcrumbs' => [
+                'title' => 'Penjualan',
+                'path' => [
+                    'Penjualan' => 0
+                ]
+            ],
+            'customers' => Customer::latest()->get(['id', 'nama']),
+            'products' => Product::latest()->get(['id', 'nama']),
+            'sale' => Sale::with('saleDetails', 'saleDetails.product', 'saleDetails.product.supply')->find($id)
         ]);
     }
 }

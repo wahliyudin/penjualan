@@ -54,6 +54,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::prefix('penjualan')->name('sales.')->group(function () {
         Route::get('/', [SaleController::class, 'index'])->name('index');
         Route::get('create', [SaleController::class, 'create'])->name('create');
+        Route::get('{id}/edit', [SaleController::class, 'edit'])->name('edit');
     });
 });
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth'])->name('dashboard');

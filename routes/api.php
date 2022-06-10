@@ -66,6 +66,9 @@ Route::name('api.')->group(function () {
     Route::prefix('sales')->name('sales.')->group(function () {
         Route::post('/', [SaleController::class, 'index'])->name('index');
         Route::post('store', [SaleController::class, 'store'])->name('store');
+        Route::put('{id}/update', [SaleController::class, 'update'])->name('update');
         Route::delete('{id}/destroy', [SaleController::class, 'destroy'])->name('destroy');
+        Route::delete('{id}/destroy-sale-detail', [SaleController::class,
+        'destroySaleDetail'])->name('destroy-sale-detail');
     });
 });
