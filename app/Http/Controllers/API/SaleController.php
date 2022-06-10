@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use App\Models\Supply;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -50,6 +52,12 @@ class SaleController extends Controller
                     'qty' => $request->qtys[$i],
                     'total' => $request->totals[$i]
                 ]);
+                $product = Product::with('supply')->find($request->product_ids[$i]);
+                $stok = (int) $product->supply->stok - (int) $request->qtys[$i];
+                $product->supply()->update([
+                    'stok' => $stok,
+                    'total' => $stok * $product->harga
+                ]);
             }
             return response()->json([
                 'status' => 'success',
@@ -72,6 +80,14 @@ class SaleController extends Controller
 
             if (!$sale) {
                 throw new Exception('Data Penjualan tidak ditemukan!', 400);
+            }
+            foreach ($sale->saleDetails as $item) {
+                $product = Product::with('supply')->find($item->product_id);
+                $stok = $product->supply->stok + $item->qty;
+                $product->supply()->update([
+                    'stok' => $stok,
+                    'total' => $stok * $product->harga
+                ]);
             }
             $sale->delete();
             return response()->json([

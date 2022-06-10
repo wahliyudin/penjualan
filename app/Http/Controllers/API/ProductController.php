@@ -87,18 +87,13 @@ class ProductController extends Controller
     public function byId($id)
     {
         try {
-            $product = Product::find($id);
+            $product = Product::with('supply')->find($id);
             if (!$product) {
                 throw new Exception('Data Barang tidak ditemukan!', 400);
             }
-            $data = [
-                'id' => $product->id,
-                'nama' => $product->nama,
-                'harga' => $product->harga,
-            ];
             return response()->json([
                 'status' => 'success',
-                'data' => $data,
+                'data' => $product,
             ]);
         } catch (\Exception $th) {
             $th->getCode() == 400 ? $code = 400 : $code = 500;

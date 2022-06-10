@@ -19,4 +19,9 @@ class Product extends Model
     {
         return $this->belongsTo(TypeProduct::class);
     }
+
+    public function supply()
+    {
+        return $this->hasOne(Supply::class);
+    }
 }
