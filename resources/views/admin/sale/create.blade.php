@@ -59,6 +59,26 @@
 
                             </tbody>
                         </table>
+
+                        <div class="row mt-4 justify-content-end pr-2">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="grand_total">Total</label>
+                                    <input type="text" class="form-control" readonly value="Rp. 0" name="grand_total" id="grand_total" placeholder="Total">
+                                    <span class="text-danger" id="totalError"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="total_bayar">Jumlah Bayar</label>
+                                    <input type="text" class="form-control" name="total_bayar" id="total_bayar" placeholder="Jumlah Bayar">
+                                    <span class="text-danger" id="total_bayarError"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="kembalian">Kembalian</label>
+                                    <input type="text" class="form-control" readonly name="kembalian" id="kembalian" placeholder="Kembalian">
+                                    <span class="text-danger" id="kembalianError"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
@@ -159,6 +179,13 @@
             }
             var harga = $($(event.target).parent().parent().parent().find('#harga')).val();
             $($(event.target).parent().parent().parent().find('#total')).val(formatRupiah(String(parseInt(replaceFormatRupiah(String(harga))) * parseInt(event.target.value)), 'Rp.'));
+
+            var sum = 0;
+            $.each($('#total*'), function (indexInArray, valueOfElement) {
+                sum += parseInt(replaceFormatRupiah(String(valueOfElement.value)))
+            });
+            $('#grand_total').val(formatRupiah(String(sum), 'Rp.'));
+            generateKembalian()
         });
 
         $('body').on('click', '.remove', function(event) {
@@ -182,9 +209,9 @@
 
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                split = number_string.split(','),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
+            split = number_string.split(','),
+            sisa = split[0].length % 3,
+            rupiah = split[0].substr(0, sisa),
                 ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
             // tambahkan titik jika yang di input sudah menjadi angka satuan ribuan
@@ -197,45 +224,71 @@
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
 
-        $('body').on('click', '.btn-save', function(event) {
-            var customer_id = $("#customer_id").val();
-            var no_faktur = $("#no_faktur").val();
-            var tanggal = $('input[name="tanggal"]').val();
-            var keterangan = $("#keterangan").val();
-            var qtys = $("input[name='qty[]']").map(function(){
-                return $(this).val();
-            }).get();
-            var product_ids = $("select[name='product_id[]']").map(function(){
-                return $(this).val();
-            }).get();
-            var totals = $("input[name='total[]']").map(function(){
-                return replaceFormatRupiah($(this).val());
-            }).get();
-            $("#btn-save").html('Please Wait...');
-            $("#btn-save").attr("disabled", true);
+        $('#total_bayar').keyup(function (e) {
+            $('#total_bayar').val(formatRupiah(this.value, 'Rp.'));
+            generateKembalian()
+        });
 
-            // ajax
-            $.ajax({
-                type: "POST",
-                url: "{{ route('api.sales.store') }}",
-                data: {
-                    customer_id: customer_id,
-                    no_faktur: no_faktur,
-                    tanggal: tanggal,
-                    keterangan: keterangan,
-                    qtys: qtys,
-                    product_ids: product_ids,
-                    totals: totals
-                },
-                dataType: 'json',
-                success: function(res) {
-                    $("#btn-save").html('Submit');
-                    $("#btn-save").attr("disabled", false);
-                    toastr.success(res.message, 'Berhasil!');
-                    window.location.reload()
-                },
-                error: ajaxError,
-            });
+        function generateKembalian() {
+            var kembalian = parseInt(replaceFormatRupiah($('#total_bayar').val())) - parseInt(replaceFormatRupiah($(
+                '#grand_total').val()));
+            var a = parseInt(replaceFormatRupiah($('#grand_total').val()));
+            var b = parseInt(replaceFormatRupiah($('#total_bayar').val()));
+            var c = parseInt(replaceFormatRupiah($('#kembalian').val()));
+            if (a >= b) {
+                $('#kembalian').val('Rp. 0');
+            } else {
+                $('#kembalian').val(formatRupiah(String(kembalian), 'Rp. '));
+            }
+        }
+
+        $('body').on('click', '.btn-save', function(event) {
+            if (parseInt(replaceFormatRupiah($('#total_bayar').val())) < parseInt(replaceFormatRupiah($('#grand_total').val()))) {
+                toastr.warning('Jumkah Bayar Kurang!', 'Peringatan!');
+            } else {
+                var customer_id = $("#customer_id").val();
+                var no_faktur = $("#no_faktur").val();
+                var tanggal = $('input[name="tanggal"]').val();
+                var keterangan = $("#keterangan").val();
+                var total_bayar = replaceFormatRupiah($("#total_bayar").val());
+                var kembalian = replaceFormatRupiah($("#kembalian").val());
+                var qtys = $("input[name='qty[]']").map(function(){
+                    return $(this).val();
+                }).get();
+                var product_ids = $("select[name='product_id[]']").map(function(){
+                    return $(this).val();
+                }).get();
+                var totals = $("input[name='total[]']").map(function(){
+                    return replaceFormatRupiah($(this).val());
+                }).get();
+                $("#btn-save").html('Please Wait...');
+                $("#btn-save").attr("disabled", true);
+
+                // ajax
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('api.sales.store') }}",
+                    data: {
+                        customer_id: customer_id,
+                        no_faktur: no_faktur,
+                        tanggal: tanggal,
+                        keterangan: keterangan,
+                        total_bayar: total_bayar,
+                        kembalian: kembalian,
+                        qtys: qtys,
+                        product_ids: product_ids,
+                        totals: totals
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        $("#btn-save").html('Submit');
+                        $("#btn-save").attr("disabled", false);
+                        toastr.success(res.message, 'Berhasil!');
+                        window.location.reload()
+                    },
+                    error: ajaxError,
+                });
+            }
         });
     </script>
 @endpush

@@ -14,7 +14,9 @@ class Sale extends Model
         'tanggal',
         'no_faktur',
         'keterangan',
-        'jumlah'
+        'jumlah',
+        'total_bayar',
+        'kembalian'
     ];
 
     public function customer()

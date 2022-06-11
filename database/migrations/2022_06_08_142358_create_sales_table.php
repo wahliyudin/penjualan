@@ -20,6 +20,8 @@ class CreateSalesTable extends Migration
             $table->string('no_faktur');
             $table->string('keterangan');
             $table->bigInteger('jumlah');
+            $table->bigInteger('total_bayar');
+            $table->bigInteger('kembalian');
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->timestamps();

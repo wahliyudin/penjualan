@@ -45,6 +45,8 @@ class SaleController extends Controller
                 'no_faktur' => $request->no_faktur,
                 'tanggal' => Carbon::make($request->tanggal)->format('Y-m-d'),
                 'keterangan' => $request->keterangan,
+                'total_bayar' => $request->total_bayar,
+                'kembalian' => $request->kembalian,
                 'jumlah' => array_sum($request->totals)
             ]);
             for ($i = 0; $i < count($request->product_ids); $i++) {
@@ -86,25 +88,11 @@ class SaleController extends Controller
                 'no_faktur' => $request->no_faktur,
                 'tanggal' => Carbon::make($request->tanggal)->format('Y-m-d'),
                 'keterangan' => $request->keterangan,
+                'total_bayar' => $request->total_bayar,
+                'kembalian' => $request->kembalian,
                 'jumlah' => array_sum($request->totals)
             ]);
             for ($i = 0; $i < count($request->product_ids); $i++) {
-                // if (isset($request->sale_detail_ids[$i])) {
-                //     SaleDetail::find($request->sale_detail_ids[$i])->update([
-                //         'sale_id' => $sale->id,
-                //         'product_id' => $request->product_ids[$i],
-                //         'qty' => $request->qtys[$i],
-                //         'total' => $request->totals[$i]
-                //     ]);
-                // } else {
-                //     SaleDetail::create([
-                //         'sale_id' => $sale->id,
-                //         'product_id' => $request->product_ids[$i],
-                //         'qty' => $request->qtys[$i],
-                //         'total' => $request->totals[$i]
-                //     ]);
-                // }
-
                 try {
                     $sale_detail_id = isset($request->sale_detail_ids[$i]) ? Crypt::decrypt($request->sale_detail_ids[$i]) : null;
                 } catch (DecryptException $e) {
