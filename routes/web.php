@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    return view('admin.exports.struk');
     return redirect()->route('login');
 });
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -55,6 +56,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         Route::get('/', [SaleController::class, 'index'])->name('index');
         Route::get('create', [SaleController::class, 'create'])->name('create');
         Route::get('{id}/edit', [SaleController::class, 'edit'])->name('edit');
+
+        Route::get('{id}/cetak-struk', [SaleController::class, 'cetakStruk'])->name('cetak-struk');
     });
 });
 Route::get('/dashboard', [HomeController::class, 'index'])->middleware(['auth'])->name('dashboard');

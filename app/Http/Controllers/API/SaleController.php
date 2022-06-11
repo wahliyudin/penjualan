@@ -23,10 +23,15 @@ class SaleController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="' . route('admin.sales.edit', Crypt::encrypt($row->id)) . '"
-                        class="btn btn-success btn-sm">Ubah</a> <a
-                        href="javascript:void(0)"
-        class="delete btn btn-danger btn-sm" id="' . Crypt::encrypt($row->id) . '">Hapus</a>';
+                    $actionBtn = '
+                    <div class="d-flex align-items-center">
+                    <a href="' . route('admin.sales.edit', Crypt::encrypt($row->id)) . '"
+                        class="btn btn-success btn-sm mr-2">Ubah</a>
+                    <a href="javascript:void(0)"
+                        class="delete btn btn-danger btn-sm mr-2" id="' . Crypt::encrypt($row->id) . '">Hapus</a>
+                    <a href="' . route('admin.sales.cetak-struk', Crypt::encrypt($row->id)) . '"
+                        target="_blank" class="btn btn-secondary btn-sm">Cetak</a>
+                    </div>';
                     return $actionBtn;
                 })
                 ->addColumn('jumlah', function ($row) {
