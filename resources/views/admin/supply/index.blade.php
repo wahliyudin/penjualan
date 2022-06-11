@@ -144,9 +144,8 @@
                     $('#Supply-modal').modal('show');
                     $('#id').val(res.data.id);
                     $('#stok').val(res.data.stok);
-                    $('#total').val(formatRupiah(res.data.total, 'Rp.'));
+                    $('#total').val(formatRupiah(String(res.data.total), 'Rp.'));
                     $('#product_id').val(res.data.product_id).trigger('change');
-                    $('#total').val(res.data.total);
                 },
                 error: ajaxError,
             });

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
@@ -35,7 +36,9 @@ class SaleController extends Controller
             ],
             'customers' => Customer::latest()->get(['id', 'nama']),
             'products' => Product::latest()->get(['id', 'nama']),
-            'no_faktur' => generateNoFaktur()
+            'no_faktur' => generateNoFaktur(),
+            'account_cashs' => Account::where('classification_id', 1)->get(),
+            'account_sales' => Account::where('classification_id', 2)->get()
         ]);
     }
 

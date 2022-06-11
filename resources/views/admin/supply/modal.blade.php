@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <label for="harga">Harga</label>
-                        <input type="text" readonly class="form-control" name="harga" id="harga" placeholder="Stok">
+                        <input type="text" readonly class="form-control" name="harga" id="harga" placeholder="Harga">
                         <span class="text-danger" id="hargaError"></span>
                     </div>
                     <div class="form-group">
