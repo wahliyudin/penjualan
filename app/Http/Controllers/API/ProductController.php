@@ -7,6 +7,9 @@ use App\Models\Product;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
@@ -18,9 +21,9 @@ class ProductController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm"
+                    $actionBtn = '<div class="d-flex align-items-center"><a href="javascript:void(0)" class="edit btn btn-success btn-sm mr-2"
         data-id="' . Crypt::encrypt($row->id) . '">Ubah</a> <a href="javascript:void(0)"
-        class="delete btn btn-danger btn-sm" id="' . Crypt::encrypt($row->id) . '">Hapus</a>';
+        class="delete btn btn-danger btn-sm" id="' . Crypt::encrypt($row->id) . '">Hapus</a></div>';
                     return $actionBtn;
                 })
                 ->addColumn('harga', function($row){
@@ -34,13 +37,26 @@ class ProductController extends Controller
     public function updateOrCreate(Request $request)
     {
         try {
+            if (isset($request->id)) {
+                $image = QrCode::format('png')->size(200)->errorCorrection('H')->generate($request->kode);
+                $name_qrcode = time() . '.png';
+                Storage::delete(Str::replaceFirst('storage', 'public', $request->qrcode));
+                Storage::disk('local')->put('public/images/products/qr-code/'.$name_qrcode, $image);
+            } else {
+                $image = QrCode::format('png')->size(200)->errorCorrection('H')->generate($request->kode);
+                $name_qrcode = time() . '.png';
+                Storage::disk('local')->put('public/images/products/qr-code/'.$name_qrcode, $image);
+            }
+
             Product::updateOrCreate(
                 [
                     'id' => $request->id
                 ],
                 [
                     'nama' => $request->nama,
+                    'kode' => $request->kode,
                     'type_product_id' => $request->type_product_id,
+                    'qrcode' => 'storage/images/products/qr-code/'. $name_qrcode,
                     'harga' => replaceRupiah($request->harga),
                 ]
             );
@@ -68,6 +84,7 @@ class ProductController extends Controller
             $data = [
                 'id' => $product->id,
                 'nama' => $product->nama,
+                'kode' => $product->kode,
                 'type_product_id' => $product->type_product_id,
                 'harga' => $product->harga,
             ];

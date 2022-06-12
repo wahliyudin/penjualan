@@ -17,7 +17,7 @@ class ProductController extends Controller
                     'Data Barang' => 0
                 ]
             ],
-            'type_products' => TypeProduct::latest()->get(['id', 'nama'])
+            'type_products' => TypeProduct::latest()->get(['id', 'nama']),
         ]);
     }
 }

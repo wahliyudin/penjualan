@@ -15,8 +15,10 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('kode');
             $table->string('nama');
             $table->bigInteger('harga');
+            $table->string('qrcode');
             $table->unsignedBigInteger('type_product_id');
 
             $table->foreign('type_product_id')->references('id')->on('type_products')->onDelete('cascade');

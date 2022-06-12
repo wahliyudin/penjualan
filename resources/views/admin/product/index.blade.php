@@ -17,6 +17,8 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>QR Code</th>
+                                    <th>Kode</th>
                                     <th>Nama</th>
                                     <th>Tipe Barang</th>
                                     <th>Harga</th>
@@ -93,6 +95,17 @@
                         name: 'DT_RowIndex'
                     },
                     {
+                        data: 'qrcode',
+                        name: 'qrcode',
+                        "render": function(data, type, full) {
+                            return '<img height="75%" width="75%" src="{{ url('/') }}/' + data + '"/>';
+                        }
+                    },
+                    {
+                        data: 'kode',
+                        name: 'kode'
+                    },
+                    {
                         data: 'nama',
                         name: 'nama'
                     },
@@ -122,6 +135,7 @@
         $('#addNewProduct').click(function() {
             $('#addEditProductForm').trigger("reset");
             $("#id").val('');
+            $("#kode").val('{{ generateCodeProduct() }}');
             $('.modal-title').html("Tambah Barang");
             $('#Product-modal').modal('show');
         });
@@ -139,6 +153,7 @@
                     $('#Product-modal').modal('show');
                     $('#id').val(res.data.id);
                     $('#nama').val(res.data.nama);
+                    $('#kode').val(res.data.kode);
                     $('#type_product_id').val(res.data.type_product_id).trigger('change');
                     $('#harga').val(res.data.harga);
                 },
@@ -150,6 +165,7 @@
             var id = $("#id").val();
             var nama = $("#nama").val();
             var harga = $("#harga").val();
+            var kode = $("#kode").val();
             var type_product_id = $("#type_product_id").val();
             $("#btn-save").html('Please Wait...');
             $("#btn-save").attr("disabled", true);
@@ -161,12 +177,13 @@
                 data: {
                     id: id,
                     nama: nama,
+                    kode: kode,
                     type_product_id: type_product_id,
                     harga: harga,
                 },
                 dataType: 'json',
                 success: function(res) {
-                    table.ajax.reload();
+                    location.reload();
                     $("#btn-save").html('Submit');
                     $("#btn-save").attr("disabled", false);
                     toastr.success(res.message, 'Berhasil!');

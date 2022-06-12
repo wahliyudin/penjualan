@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Product;
 use App\Models\Registration;
 use App\Models\Sale;
 use Carbon\Carbon;
@@ -31,6 +32,18 @@ if (!function_exists('generateNoFaktur')) {
             return 'NF' . $thnBulan . '10000001';
         } else {
             return 'NF' . $thnBulan . (int) substr(Sale::get()->last()->no_faktur, -8) + 1;
+        }
+    }
+}
+
+if (!function_exists('generateCodeProduct')) {
+    function generateCodeProduct()
+    {
+        $thnBulan = Carbon::now()->year . Carbon::now()->month;
+        if (Product::count() === 0) {
+            return $thnBulan . '10000001';
+        } else {
+            return $thnBulan . (int) substr(Product::get()->last()->kode, -8) + 1;
         }
     }
 }

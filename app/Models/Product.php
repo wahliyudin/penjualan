@@ -10,8 +10,10 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
+        'kode',
         'nama',
         'harga',
+        'qrcode',
         'type_product_id'
     ];
 

@@ -12,6 +12,11 @@
                     @csrf
                     <input type="hidden" name="id" id="id">
                     <div class="form-group">
+                        <label for="kode">Kode</label>
+                        <input type="text" class="form-control" readonly name="kode" id="kode" placeholder="Kode">
+                        <span class="text-danger" id="kodeError"></span>
+                    </div>
+                    <div class="form-group">
                         <label for="nama">Nama</label>
                         <input type="text" class="form-control" name="nama" id="nama" placeholder="Nama">
                         <span class="text-danger" id="namaError"></span>
