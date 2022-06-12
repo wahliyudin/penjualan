@@ -28,7 +28,7 @@ class SaleController extends Controller
 
     public function create()
     {
-        return view('admin.sale.create', [
+        return view('admin.sale.create-by-qrcode', [
             'breadcrumbs' => [
                 'title' => 'Penjualan',
                 'path' => [

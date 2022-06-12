@@ -121,6 +121,26 @@ class ProductController extends Controller
         }
     }
 
+    public function byKode($kode)
+    {
+        try {
+            $product = Product::with('supply')->where('kode', $kode)->first();
+            if (!$product) {
+                throw new Exception('Data Barang tidak ditemukan!', 400);
+            }
+            return response()->json([
+                'status' => 'success',
+                'data' => $product,
+            ]);
+        } catch (\Exception $th) {
+            $th->getCode() == 400 ? $code = 400 : $code = 500;
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], $code);
+        }
+    }
+
     public function destroy($id)
     {
         try {

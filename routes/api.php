@@ -50,6 +50,7 @@ Route::name('api.')->group(function () {
         Route::delete('{id}/destroy', [ProductController::class, 'destroy'])->name('destroy');
 
         Route::get('{id}/by-id', [ProductController::class, 'byId'])->name('by-id');
+        Route::get('{kode}/by-kode', [ProductController::class, 'byKode'])->name('kode');
     });
     Route::prefix('supplies')->name('supplies.')->group(function () {
         Route::post('/', [SupplyController::class, 'index'])->name('index');
