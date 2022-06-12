@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\SupplyController;
 use App\Http\Controllers\Admin\TypeProductController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +23,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Route::get('qrcode', function () {
+    $image = QrCode::format('png')->size(200)->errorCorrection('H')->generate('Wahliyudin');
+    $name = 'img-' . time() . '.png';
+    Storage::disk('local')->put('public/images/qr-code/'.$name, $image);
+    return view('coba', compact('name'));
+});
 Route::get('/', function () {
     return redirect()->route('login');
 });
